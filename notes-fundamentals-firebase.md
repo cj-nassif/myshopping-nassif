@@ -39,3 +39,36 @@ implementation "com.google.firebase:firebase-analytics"
 // Instalação firestore no app
 
 yarn add @react-native-firebase/firestore
+
+//Emulador Firebase: intruções em:
+https://rnfirebase.io/firestore/emulator
+
+// Instalação Emulador
+
+curl -sL firebase.tools | bash
+
+// Inicializando o emulador
+firebase emulators:start --only firestore
+
+// Configurar no arquivo index.js
+import '@react-native-firebase/app';
+import firestore from '@react-native-firebase/firestore';
+
+...
+
+if (__DEV__) {
+  firestore().useEmulator('localhost', 8080);
+}
+
+const db = firestore();
+
+//com essas configurações se o emulador estiver online ele será utilizado e não o ambiente de produção.
+
+
+// Utilizando o Storage do firebase
+// Instruções no site:
+//https://rnfirebase.io/storage/usage
+
+// Instalar o react native firebase storage
+yarn add @react-native-firebase/storage
+
