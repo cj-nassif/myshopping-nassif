@@ -9,21 +9,113 @@ import { Product, ProductProps } from '../Product';
 export function ShoppingList() {
   const [products, setProducts] = useState<ProductProps[]>([]);
 
+  // useEffect(() => {
+  //   firestore()
+  //     .collection('products')
+  //     .get()
+  //     .then(response => {
+  //       const data = response.docs.map(doc => {
+  //         return {
+  //           id: doc.id,
+  //           ...doc.data()
+  //         }
+  //       }) as ProductProps[];
+  //       setProducts(data);
+  //     })
+  //     .catch(error => console.log(error));
+  // }, [])
+
+  //Estratégia de atualização em tempo real (realtime firestore)
+
+  // useEffect(() => {
+  //   const subscribe = firestore()
+  //     .collection('products')
+  //     .onSnapshot(querySnapshot => {
+  //       const data = querySnapshot.docs.map((doc) => {
+  //         return {
+  //           id: doc.id,
+  //           ...doc.data()
+  //         }
+  //       }) as ProductProps[];
+
+  //       setProducts(data);
+  //     })
+  //   return () => subscribe();
+  // }, [])
+
+  // //  aplicando filtro
+  // useEffect(() => {
+  //   const subscribe = firestore()
+  //     .collection('products')
+  //     .where('quantity', '==', 100)
+  //     .onSnapshot(querySnapshot => {
+  //       const data = querySnapshot.docs.map((doc) => {
+  //         return {
+  //           id: doc.id,
+  //           ...doc.data()
+  //         }
+  //       }) as ProductProps[];
+
+  //       setProducts(data);
+  //     })
+  //   return () => subscribe();
+  // }, [])
+
+  // //  aplicando limite de quantidade objetos retornados na consulta
+  // useEffect(() => {
+  //   const subscribe = firestore()
+  //     .collection('products')
+  //     .limit(2)
+  //     .onSnapshot(querySnapshot => {
+  //       const data = querySnapshot.docs.map((doc) => {
+  //         return {
+  //           id: doc.id,
+  //           ...doc.data()
+  //         }
+  //       }) as ProductProps[];
+
+  //       setProducts(data);
+  //     })
+  //   return () => subscribe();
+  // }, [])
+
+  //  ordenando a consulta
   useEffect(() => {
-    firestore()
+    const subscribe = firestore()
       .collection('products')
-      .get()
-      .then(response => {
-        const data = response.docs.map(doc => {
+      .orderBy('description', 'asc')
+      .onSnapshot(querySnapshot => {
+        const data = querySnapshot.docs.map((doc) => {
           return {
             id: doc.id,
             ...doc.data()
           }
         }) as ProductProps[];
+
         setProducts(data);
       })
-      .catch(error => console.log(error));
+    return () => subscribe();
   }, [])
+
+  // //intervalo de consulta
+  // useEffect(() => {
+  //   const subscribe = firestore()
+  //     .collection('products')
+  //     .orderBy('quantity')
+  //     .startAt(2)
+  //     .endAt(4)
+  //     .onSnapshot(querySnapshot => {
+  //       const data = querySnapshot.docs.map((doc) => {
+  //         return {
+  //           id: doc.id,
+  //           ...doc.data()
+  //         }
+  //       }) as ProductProps[];
+
+  //       setProducts(data);
+  //     })
+  //   return () => subscribe();
+  // }, [])
 
   return (
     <FlatList
